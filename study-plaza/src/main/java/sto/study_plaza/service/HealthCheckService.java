@@ -1,6 +1,7 @@
 package sto.study_plaza.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HealthCheckService {
@@ -16,20 +18,31 @@ public class HealthCheckService {
     private final JdbcTemplate jdbcTemplate;
 
     public Map<String, Object> runHealthCheck(String input) {
-        Map<String, Object> result = new HashMap<>();
+        log.info("[HealthCheck] 시작: input={}", input);
 
+        Map<String, Object> result = new HashMap<>();
         String processed = processString(input);
+        log.debug("[HealthCheck] 문자열 처리 결과: {}", processed);
         result.put("backendTest", processed);
 
         try {
+            log.trace("[HealthCheck] 테이블 확인 및 생성 시도");
             checkAndCreateTable();
+
+            log.trace("[HealthCheck] 테스트 데이터 삽입 시도");
             insertTestData(input);
+
+            log.trace("[HealthCheck] 테스트 데이터 조회 시도");
             List<Map<String, Object>> rows = readTestData();
+            log.debug("[HealthCheck] 조회된 데이터: {}", rows);
+
             result.put("dbTest", rows);
         } catch (Exception e) {
+            log.error("[HealthCheck] DB 작업 중 오류 발생", e);
             result.put("dbError", e.getMessage());
         }
 
+        log.info("[HealthCheck] 완료");
         return result;
     }
 

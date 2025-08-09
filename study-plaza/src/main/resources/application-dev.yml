@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study_plaza?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: mysql
+
+cors:
+  allowed-origins:
+    - http://localhost:3000
+
+  allowed-methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  file:
+    name: C:/Users/hthth/workspace/logging/study_plaza_dev_log/study_plaza_logging.log

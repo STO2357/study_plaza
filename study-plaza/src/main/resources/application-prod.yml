@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study_plaza?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: prod_user
+    password: prod_password
+
+cors:
+  allowed-origins:
+    - https://studyplaza.com
+
+  allowed-methods:
+    - GET
+    - POST
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/app/prod-app.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
