@@ -34,9 +34,9 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ApiResponse<UUID> login(@RequestBody @Validated LogInRequest logInRequest) {
-        UUID userId = memberCommandService.login(logInRequest);
-        return ApiResponse.success(userId);
+    public ApiResponse<String> login(@RequestBody @Validated LogInRequest logInRequest) {
+        String token = memberCommandService.login(logInRequest);
+        return ApiResponse.success(token);
     }
 
 }

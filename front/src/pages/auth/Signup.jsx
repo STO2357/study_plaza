@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import InputField from "../../components/common/inputfield/InputField";
 import Button from "../../components/common/button/Button";
@@ -7,7 +8,9 @@ import { signupApi } from "../../api/auth";
 import styles from "./authStyle/Signup.module.css";
 
 const Signup = () => {
-  const [form, setForm] = useState({
+
+    const navigate = useNavigate();
+    const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
@@ -18,12 +21,13 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-  try {
-    const res = await signupApi(form);
-    console.log(res.message);
-  } catch (err) {
-    console.error(err.message);
-  }
+      try {
+          const res = await signupApi(form);
+          console.log("회원가입 결과:", res.data.data);
+          navigate("/");
+      } catch (err) {
+          console.error(err.response?.data?.message || err.message);
+      }
 };
 
   return (

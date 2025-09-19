@@ -1,20 +1,24 @@
 import axiosInstance from "./axiosInstance";
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export async function signupApi(userData) {
   if (USE_MOCK) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (userData.userId === "asdf1234") {
-          reject({ message: "이미 존재하는 아이디입니다." });
+          reject({
+            response: { data: { message: "이미 존재하는 아이디입니다." } },
+          });
         } else {
-          resolve({ message: "회원가입 완료" });
+          resolve({
+            data: { status: "success", data: "회원가입 완료" },
+          });
         }
       }, 500);
     });
   }
-  return axiosInstance.post("/api/signup", userData);
+  return axiosInstance.post("/signup", userData);
 }
 
 export async function loginApi(credentials) {
@@ -29,5 +33,5 @@ export async function loginApi(credentials) {
       }, 500);
     });
   }
-  return axiosInstance.post("/api/login", credentials);
+  return axiosInstance.post("/login", credentials);
 }

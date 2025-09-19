@@ -13,6 +13,7 @@ import sto.study_plaza.dto.auth.SignUpRequest;
 import sto.study_plaza.entity.Member;
 import sto.study_plaza.repository.member.MemberRepository;
 import sto.study_plaza.service.member.MemberCommandService;
+import sto.study_plaza.util.JwtUtil;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -32,6 +33,9 @@ class MemberCommandServiceTest {
     MemberRepository memberRepository;
 
     @Mock
+    JwtUtil jwtUtil;
+
+    @Mock
     PasswordEncoder passwordEncoder;
 
     @InjectMocks
@@ -46,7 +50,7 @@ class MemberCommandServiceTest {
         // save 호출 시 ID 넣어서 반환
         when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> {
             Member member = invocation.getArgument(0);
-            return TestEntityUtil.setRandomId(member); // ✅ 유틸 사용
+            return TestEntityUtil.setRandomId(member); //
         });
 
         // when
@@ -69,16 +73,18 @@ class MemberCommandServiceTest {
                 .password("encodedPass")
                 .name("홍길동")
                 .build();
-        TestEntityUtil.setId(member, memberId); // ✅ 유틸 사용
+        TestEntityUtil.setId(member, memberId);
 
         when(memberRepository.findByUserId("user1")).thenReturn(Optional.of(member));
         when(passwordEncoder.matches("pass123", "encodedPass")).thenReturn(true);
+        when(jwtUtil.generateToken("user1", memberId)).thenReturn("mocked-token");
 
         // when
-        UUID result = memberCommandService.login(request);
+        String token = memberCommandService.login(request);
 
         // then
-        assertEquals(memberId, result);
+        assertNotNull(token);
+        assertEquals("mocked-token", token);
     }
 
     @Test
@@ -100,7 +106,7 @@ class MemberCommandServiceTest {
                 .password("encodedPass")
                 .name("홍길동")
                 .build();
-        TestEntityUtil.setRandomId(member); // ✅ 유틸 사용
+        TestEntityUtil.setRandomId(member); //
 
         when(memberRepository.findByUserId("user1")).thenReturn(Optional.of(member));
         when(passwordEncoder.matches("pass123", "encodedPass")).thenReturn(false);

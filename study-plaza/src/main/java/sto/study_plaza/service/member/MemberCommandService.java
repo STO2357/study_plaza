@@ -9,6 +9,7 @@ import sto.study_plaza.dto.auth.LogInRequest;
 import sto.study_plaza.dto.auth.SignUpRequest;
 import sto.study_plaza.entity.Member;
 import sto.study_plaza.repository.member.MemberRepository;
+import sto.study_plaza.util.JwtUtil;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class MemberCommandService {
 
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     public UUID signUp(SignUpRequest signUpRequest) throws IOException {
@@ -39,7 +41,7 @@ public class MemberCommandService {
         return member.getId();
     }
 
-    public UUID login(LogInRequest logInRequest) {
+    public String login(LogInRequest logInRequest) {
 
         String userId = logInRequest.getUserId();
         String password = logInRequest.getPassword();
@@ -55,7 +57,7 @@ public class MemberCommandService {
             };
         }
 
-        return member.getId();
+        return jwtUtil.generateToken(userId, member.getId());
     }
 
 
