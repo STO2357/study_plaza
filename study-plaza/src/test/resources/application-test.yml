@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: study-plaza
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study_plaza_test?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: mysql
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        connection.charSet: utf8mb4
+        connection.characterEncoding: utf8mb4
+
+  data:
+    mongodb:
+      uri: ""   # MongoDB 연결 주소 비움
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+
+
+security:
+  permit-all-patterns:
+    - /api/dev/**
+  csrf-enabled: false
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  #secret-key: ${JWT_SECRET_KEY}
+  expiration-time: 86400000  # 기본값 설정
